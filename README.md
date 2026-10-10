@@ -7,6 +7,8 @@ Quick View (Ctrl+Q).
 It exists to answer one question quickly while browsing: *which photo is
 this?* It is not a RAW developer.
 
+![A DNG file shown by rawview in Double Commander's viewer](docs/embedded.jpg)
+
 ## What it shows
 
 The plugin has three sources. **R** or a **double click** cycles through them,
@@ -20,6 +22,21 @@ closed. A small label in the bottom-left corner names the current one.
 | Sensor detail + preview look | Experimental. The embedded preview upscaled, with the fine detail it lacks added from the sensor decode. | about 650 ms |
 
 \* Measured on 10–12 megapixel files on a desktop CPU.
+
+The same file in each of the three sources (click to enlarge):
+
+<table>
+  <tr>
+    <th width="33%">Embedded preview</th>
+    <th width="33%">Sensor decode</th>
+    <th width="33%">Sensor detail + preview look</th>
+  </tr>
+  <tr>
+    <td><a href="docs/embedded.jpg"><img src="docs/embedded.jpg" width="100%" alt="Embedded preview"></a></td>
+    <td><a href="docs/sensor.jpg"><img src="docs/sensor.jpg" width="100%" alt="Sensor decode"></a></td>
+    <td><a href="docs/transfer.jpg"><img src="docs/transfer.jpg" width="100%" alt="Sensor detail with the preview's look"></a></td>
+  </tr>
+</table>
 
 The image is always scaled to fit the window. There is no zoom, pan or
 rotation.
