@@ -51,6 +51,16 @@ typing in the file panels.
   this plugin.
 - LibRaw (`libraw20` or newer) and GTK 2 at run time.
 
+## Download
+
+A prebuilt `rawview.wlx` for x86-64 is attached to each
+[release](https://github.com/pywkm/doublecmd-wlx-raw-viewer/releases).
+
+It is built on Ubuntu 22.04 and needs `libraw.so.20`, which Ubuntu 22.04 and
+Linux Mint 21 provide (`ldconfig -p | grep libraw` shows what you have). Other
+distributions often ship a different LibRaw version; build the plugin yourself
+there.
+
 ## Build
 
 On Debian, Ubuntu or Mint:
