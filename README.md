@@ -49,17 +49,20 @@ typing in the file panels.
 
 - Double Commander for Linux, **GTK2 build**. The Qt5/Qt6 builds cannot load
   this plugin.
-- LibRaw (`libraw20` or newer) and GTK 2 at run time.
+- GTK 2 at run time. The prebuilt plugin has LibRaw built in; a plugin built
+  with `build.sh` needs the system's LibRaw (`libraw20` or newer).
 
 ## Download
 
 A prebuilt `rawview.wlx` for x86-64 is attached to each
 [release](https://github.com/pywkm/doublecmd-wlx-raw-viewer/releases).
 
-It is built on Ubuntu 22.04 and needs `libraw.so.20`, which Ubuntu 22.04 and
-Linux Mint 21 provide (`ldconfig -p | grep libraw` shows what you have). Other
-distributions often ship a different LibRaw version; build the plugin yourself
-there.
+It has LibRaw built in, so it does not depend on the system's LibRaw version.
+It is built on Ubuntu 22.04 and runs there and on newer systems (Linux Mint 21
+and 22, Ubuntu 24.04, ...). Besides GTK 2 it needs libjpeg 8, Little CMS 2,
+zlib and libgomp, which are normally installed already. On older or different
+systems, build the plugin yourself. (The v1.0.0 release still needs
+`libraw.so.20`, which only Ubuntu 22.04 and Linux Mint 21 provide.)
 
 ## Build
 
@@ -70,7 +73,13 @@ sudo apt install gcc pkg-config libgtk2.0-dev libraw-dev
 ./build.sh
 ```
 
-This produces `rawview.wlx`.
+This produces `rawview.wlx`, linked against the system's LibRaw.
+
+`./build-release.sh <version>` builds the release archive the way the prebuilt
+one is made: from the committed source, in an `ubuntu:22.04` Docker container,
+with LibRaw compiled from source and built in. The result goes to `dist/`.
+Pushing a tag `v<version>` does the same on GitHub Actions and publishes the
+release.
 
 ## Install
 

@@ -1,0 +1,54 @@
+name: Release
+
+# A pushed tag v<version> builds the archive and publishes a GitHub release.
+# Running the workflow by hand only builds it and keeps it as a workflow artifact.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # The oldest supported base: the binary runs here and on newer systems.
+    container: ubuntu:22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          case "$GITHUB_REF" in
+            refs/tags/v*) version=${GITHUB_REF_NAME#v} ;;
+            *) version=dev-$(echo "$GITHUB_SHA" | cut -c1-7) ;;
+          esac
+          ./build-release.sh --in-container "$version" dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rawview
+          path: dist/*.tar.gz
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: rawview
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat > notes.md <<'EOF'
+          Viewer (WLX) plugin for the GTK2 build of Double Commander on Linux, x86-64.
+
+          LibRaw is built in, so no particular `libraw.so` version is needed.
+          Built on Ubuntu 22.04: it runs on Ubuntu 22.04 / Linux Mint 21 and newer.
+          At run time it needs GTK 2, libjpeg 8, Little CMS 2 and libgomp, which
+          a desktop with the GTK2 build of Double Commander normally has.
+
+          On other systems, build it from source (see the README).
+          EOF
+          gh release create "$GITHUB_REF_NAME" *.tar.gz --repo "$GITHUB_REPOSITORY" \
+            --title "rawview ${GITHUB_REF_NAME#v}" --notes-file notes.md
